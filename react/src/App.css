@@ -1,0 +1,135 @@
+.chat-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+
+.left-column {
+  flex: 0 0 30%;
+  background-color: #f1f1f1;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.left-column h3 {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.left-column ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.left-column li {
+  padding: 8px;
+  background-color: #fff;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.left-column li:hover {
+  background-color: #007bff;
+  color: #11ab00;
+}
+
+.right-column {
+  flex: 0 0 70%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.chat-box {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 70%;
+}
+
+.message.sender {
+  background-color: #007bff;
+  color: #fff;
+  align-self: flex-start;
+}
+
+.message.receiver {
+  background-color: #e0e0e0;
+  color: #000;
+  align-self: flex-end;
+}
+
+.input-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.input-message {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+}
+
+.input-message:focus {
+  border-color: #007bff;
+}
+
+.send-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.send-button:hover {
+  background-color: #0056b3;
+}
+
+.close-button {
+  background-color: #f44336;
+  color: white;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.close-button:hover {
+  background-color: #d32f2f;
+}
