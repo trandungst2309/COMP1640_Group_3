@@ -12,42 +12,68 @@ function Dashboard() {
     const [mostActiveUsers, setMostActiveUsers] = useState([]);
     const [mostUsedBrowsers, setMostUsedBrowsers] = useState([]);
 
+    const [user] = useState(() => {
+        const storedUser = localStorage.getItem('user');
+        return storedUser ? JSON.parse(storedUser) : { name: 'Admin', role: 'guest' };
+    });
+
+    const [selectedUserId, setSelectedUserId] = useState(user.id);
+
     useEffect(() => {
         const fetchData = async () => {
-            // Lấy thống kê chung
+            // Get general statistics
             const userStats = await userService.statistic();
             setStatistic(userStats?.data);
 
-            // Lấy danh sách trang được xem nhiều nhất
-            const pagesData = await trackService.getMostViewedPages();
+            // Get list of most viewed pages
+            const pagesData = await trackService.getMostViewedPages(user.id);
             setMostViewedPages(pagesData?.data || []);
 
-            // Lấy danh sách người dùng hoạt động nhiều nhất
+            // Get list of most active users
             const usersData = await trackService.getMostActiveUsers();
             setMostActiveUsers(usersData?.data || []);
 
-            // Lấy danh sách trình duyệt được sử dụng nhiều nhất
-            const browsersData = await trackService.getMostUsedBrowsers();
+            // Get list of most used browsers
+            const browsersData = await trackService.getMostUsedBrowsers(user.id);
             setMostUsedBrowsers(browsersData?.data || []);
         };
 
         fetchData();
-    }, []);
+    }, [user.id]);
+
 
     const stats = [
         { id: 1, title: "Number of students", count: statistic.student, icon: <FaUserGraduate size={30} className="text-primary" /> },
         { id: 2, title: "Number of tutors", count: statistic.tutor, icon: <FaChalkboardTeacher size={30} className="text-success" /> },
         { id: 3, title: "Number of staffs", count: statistic.staff, icon: <FaUsers size={30} className="text-warning" /> },
         { id: 4, title: "Documents", count: statistic.documents, icon: <FaBook size={30} className="text-info" /> },
-        { id: 5, title: "Mettings", count: statistic.meetings, icon: <FaCalendarCheck size={30} className="text-danger" /> },
+        { id: 5, title: "Meetings", count: statistic.meetings, icon: <FaCalendarCheck size={30} className="text-danger" /> },
     ];
+
+    // Function to handle when selecting a user
+    const handleUserChange = async (e) => {
+        const userId = e.target.value;
+        setSelectedUserId(userId);
+
+        // Call back data by userId
+        try {
+            const pagesData = await trackService.getMostViewedPages(userId);
+            setMostViewedPages(pagesData?.data || []);
+
+            const browsersData = await trackService.getMostUsedBrowsers(userId);
+            setMostUsedBrowsers(browsersData?.data || []);
+        } catch (err) {
+            console.error("Error loading data by userId:", err);
+        }
+    };
+
 
     return (
         <div className="container mt-4">
             <TrackPageView page="Dashboard" />
             <h2 className="mb-4">Dashboard</h2>
 
-            {/* Thống kê chung */}
+            {/* General Statistics */}
             <Row>
                 {stats.map((stat) => (
                     <Col key={stat.id} md={4} className="mb-3">
@@ -62,15 +88,37 @@ function Dashboard() {
                 ))}
             </Row>
 
-            {/* Bảng trang được xem nhiều nhất */}
+            {/* User filter dropdown */}
+            {user.role === 'staff' && (
+                <div className="row">
+                    <div className="col-md-3">
+                        <label className="form-label fw-bold">Filter by user:</label>
+                        <select
+                            className="form-select"
+                            value={selectedUserId}
+                            onChange={handleUserChange}
+                        >
+                            <option value="">All users</option>
+                            {mostActiveUsers && mostActiveUsers.map((user) => (
+                                <option key={user.id} value={user.id}>
+                                    {user.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            )}
+
+
             <div className="mt-4">
+                {/* Most Viewed Pages Table */}
                 <h3>📊 Most viewed pages</h3>
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th style={{width: '5%'}}>#</th>
-                            <th style={{width: '25%'}}>Page</th>
-                            <th style={{width: '70%'}}>Views</th>
+                            <th style={{ width: '10%' }}>#</th>
+                            <th style={{ width: '50%' }}>Pages</th>
+                            <th style={{ width: '40%' }}>Views</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,14 +129,6 @@ function Dashboard() {
                                     <td>{page.page}</td>
                                     <td>
                                         <span className="me-1">{page.views}</span>
-                                        (
-                                        {page.detail.map((user, index) => (
-                                            <span key={index}>
-                                                {user.name}: {user.count}
-                                                {index < page.detail.length - 1 && ", "} {/* Thêm dấu phẩy giữa các user nếu không phải user cuối */}
-                                            </span>
-                                        ))}
-                                        )
                                     </td>
 
                                 </tr>
@@ -102,44 +142,15 @@ function Dashboard() {
                 </Table>
             </div>
 
-            {/* Bảng người dùng hoạt động nhiều nhất */}
-            <div className="mt-4">
-                <h3>👥 Most active users</h3>
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th style={{width: '5%'}}>#</th>
-                            <th style={{width: '55%'}}>User name</th>
-                            <th style={{width: '40%'}}>Number of operations</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {mostActiveUsers.length > 0 ? (
-                            mostActiveUsers.map((user, index) => (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{user.name}</td>
-                                    <td>{user.activity}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="3" className="text-center">No data available</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </Table>
-            </div>
-
-            {/* Bảng trình duyệt được sử dụng nhiều nhất */}
+            {/* Most used browser panel */}
             <div className="mt-4">
                 <h3>🌐 Most used browser</h3>
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th style={{width: '5%'}}>#</th>
-                            <th style={{width: '55%'}}>Browser</th>
-                            <th style={{width: '40%'}}>Number of uses</th>
+                            <th style={{ width: '10%' }}>#</th>
+                            <th style={{ width: '50%' }}>Browser</th>
+                            <th style={{ width: '40%' }}>Number of uses</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -149,16 +160,37 @@ function Dashboard() {
                                     <td>{index + 1}</td>
                                     <td>{browser.browser}</td>
                                     <td>
-                                        <span className="me-1">{browser.browser_usage}</span>
-                                        (
-                                        {browser.detail.map((user, index) => (
-                                            <span key={index}>
-                                                {user.name}: {user.count}
-                                                {index < browser.detail.length - 1 && ", "} {/* Thêm dấu phẩy giữa các user nếu không phải user cuối */}
-                                            </span>
-                                        ))}
-                                        )
+                                        <span className="me-1">{browser.usage}</span>
                                     </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="3" className="text-center">No data available</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </Table>
+            </div>
+
+            {/* Most Active Users Table */}
+            <div className="mt-4">
+                <h3>👥 Most active users</h3>
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th style={{ width: '10%' }}>#</th>
+                            <th style={{ width: '50%' }}>User name</th>
+                            <th style={{ width: '40%' }}>Number of operations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {mostActiveUsers.length > 0 ? (
+                            mostActiveUsers.map((user, index) => (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>{user.name}</td>
+                                    <td>{user.activity}</td>
                                 </tr>
                             ))
                         ) : (

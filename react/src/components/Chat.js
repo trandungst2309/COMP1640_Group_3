@@ -129,7 +129,7 @@ const Chat = () => {
       >
         <div className="chat-container" style={{ display: "flex", width: "100%" }}>
           <div className="left-column" style={{ flex: 1, paddingRight: "20px" }}>
-            <h3>Người online</h3>
+            <h3>User online</h3>
             <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
               {onlineUsers.map((user) => (
                 <li
@@ -192,7 +192,7 @@ const Chat = () => {
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Nhập tin nhắn..."
+              placeholder="Input message..."
               style={{
                 width: "100%",
                 padding: "10px",
@@ -213,7 +213,7 @@ const Chat = () => {
                 cursor: "pointer",
               }}
             >
-              Gửi
+              Send
             </button>
           </div>
         </div>

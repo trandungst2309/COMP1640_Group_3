@@ -44,21 +44,21 @@ function Document() {
             const newDoc = await documentService.createDocument(selectedFile, '');
             toast.success('Create document successfully!', { position: 'top-center', autoClose: 2000 });
 
-            // Cập nhật danh sách tài liệu
+            // Update document list
             setDocuments([...documents, newDoc.data]);
 
-            // Đóng modal sau khi tải xong
+            // Close modal after loading is complete
             setShowModal(false);
             setSelectedFile(null);
         } catch (error) {
-            console.error('Lỗi:', error);
+            console.error('error:', error);
             toast.error('Document creation failed!', { position: 'top-center', autoClose: 2000 });
         }
     };
 
     const handleShowCommentModal = (doc) => {
         setSelectedDocument(doc);
-        setComment(doc.comment || ''); // Nếu đã có bình luận, hiển thị lên
+        setComment(doc.comment || ''); // If there is already a comment, show it up.
         setShowCommentModal(true);
     };
 
@@ -69,7 +69,7 @@ function Document() {
             await documentService.updateDocument(selectedDocument.id, comment);
             toast.success('Comment updated successfully!', { position: 'top-center', autoClose: 2000 });
 
-            // Cập nhật danh sách tài liệu
+            // Update document list
             setDocuments(documents.map(doc =>
                 doc.id === selectedDocument.id ? { ...doc, comment } : doc
             ));
@@ -82,7 +82,7 @@ function Document() {
 
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this document??')) return;
+        if (!window.confirm('Are you sure you want to delete this document?')) return;
         try {
             await documentService.deleteDocument(id);
             toast.success('Document deleted successfully!', { position: 'top-center', autoClose: 2000 });

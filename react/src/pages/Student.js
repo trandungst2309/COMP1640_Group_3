@@ -110,7 +110,7 @@ function Student() {
             <TrackPageView page="Student Management" />
             <ToastContainer autoClose={2000} />
             <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-                {/* Thanh tìm kiếm */}
+                {/* Search */}
                 <div className="d-flex align-items-center">
                     <h2 className="me-3"><i className="bi bi-people me-2"></i>Student Management</h2>
                     {
@@ -126,9 +126,9 @@ function Student() {
                     }
                 </div>
 
-                {/* Chọn gia sư hàng loạt */}
+                {/* Select tutor */}
                 {
-                    userStore?.role === 'staff' &&
+                    userStore?.role === 'admin' &&
                     <div className="d-flex align-items-center">
                         <Form.Select
                             size="sm"
@@ -156,12 +156,12 @@ function Student() {
 
             </div>
 
-            {/* Bảng sinh viên */}
+            {/* Table of student */}
             <Table bordered hover responsive>
                 <thead className="table-dark">
                     <tr>
                         {
-                            userStore?.role === 'staff' &&
+                            userStore?.role === 'admin' &&
                             <th>
                                 <Form.Check
                                     type="checkbox"
@@ -184,7 +184,7 @@ function Student() {
                     {paginatedUsers.length ? paginatedUsers.map((user, index) => (
                         <tr key={user.id}>
                             {
-                                userStore?.role === 'staff' &&
+                                userStore?.role === 'admin' && 
                                 <td>
                                     <Form.Check
                                         type="checkbox"
@@ -225,7 +225,7 @@ function Student() {
                 </tbody>
             </Table>
 
-            {/* Phân trang */}
+            {/* Pagination */}
             {totalPages > 1 && (
                 <Pagination className="justify-content-end">
                     <Pagination.First onClick={() => setCurrentPage(1)} disabled={currentPage === 1} />

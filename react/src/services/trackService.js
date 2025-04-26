@@ -1,9 +1,14 @@
 const API_URL = "http://127.0.0.1:8001/api";
 
-const fetchData = async (endpoint, errorMessage) => {
+const fetchData = async (endpoint, errorMessage, params = {}) => {
     try {
         const token = localStorage.getItem("token");
-        const response = await fetch(`${API_URL}/${endpoint}`, {
+
+        // Generate query params string if any
+        const queryString = new URLSearchParams(params).toString();
+        const url = `${API_URL}/${endpoint}${queryString ? `?${queryString}` : ""}`;
+
+        const response = await fetch(url, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -22,9 +27,25 @@ const fetchData = async (endpoint, errorMessage) => {
 };
 
 const trackService = {
-    getMostViewedPages: () => fetchData("most-viewed-pages", "Get list of most viewed pages failed"),
-    getMostActiveUsers: () => fetchData("most-active-users", "Getting list of most active users failed"),
-    getMostUsedBrowsers: () => fetchData("most-used-browsers", "Getting list of most used browsers failed"),
+    getMostViewedPages: (userId = null) =>
+        fetchData(
+            "most-viewed-pages",
+            "Get list of most viewed pages failed",
+            userId ? { user_id: userId } : {}
+        ),
+
+    getMostActiveUsers: () =>
+        fetchData(
+            "most-active-users",
+            "Getting list of most active users failed"
+        ),
+
+    getMostUsedBrowsers: (userId = null) =>
+        fetchData(
+            "most-used-browsers",
+            "Getting list of most used browsers failed",
+            userId ? { user_id: userId } : {}
+        ),
 };
 
 export default trackService;

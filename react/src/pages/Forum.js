@@ -30,15 +30,15 @@ function Forum() {
             const isConfirmed = window.confirm(`Do you agree to submit the post?`);
             if (!isConfirmed) return;
             try {
-                const newBlog = await blogService.createBlog(title, newPost, image); // Gọi API để tạo blog
-                setPosts([newBlog.data, ...posts]); // Cập nhật danh sách bài viết với dữ liệu từ API
+                const newBlog = await blogService.createBlog(title, newPost, image); // Call API to create blog
+                setPosts([newBlog.data, ...posts]); // Update article list with data from API
 
                 // Reset form
                 setTitle("");
                 setNewPost("");
                 setLink(null);
                 fileInputRef.current.value = "";
-                document.getElementById("closeModal").click(); // Đóng modal
+                document.getElementById("closeModal").click(); // Close modal
             } catch (error) {
                 console.error("Error creating post:", error);
                 alert("An error occurred while creating the post!");
@@ -124,7 +124,7 @@ function Forum() {
                 </div>
             </div>
 
-            {/* Danh sách bài viết */}
+            {/* List of articles */}
             <div className="mt-4">
                 <div className="row">
                     {posts.map(post => (
@@ -150,13 +150,13 @@ function Post({ post, handleD }) {
         } catch (error) {
             console.error("Error while getting comments:", error);
         }
-    }, [post.id]); // Thêm post.id vào dependency để tránh lỗi 
+    }, [post.id]); // Add post.id to dependency to avoid error
 
     useEffect(() => {
         if (showModal) {
-            fetchComments(); // Gọi API khi mở modal
+            fetchComments(); // Call API when opening modal
         }
-    }, [showModal, fetchComments]); // Thêm fetchComments vào dependency array
+    }, [showModal, fetchComments]); // Add fetchComments to dependency array
 
     const handleFileChange = (event) => {
         const selectedFiles = event.target.files;
@@ -185,7 +185,7 @@ function Post({ post, handleD }) {
         <div className="col-md-6">
             <div className="card mb-3 p-3 shadow-sm">
                 <div className="row g-3">
-                    {/* Cột Trái: Hình Ảnh */}
+                    {/* Left Column: Image */}
                     <div className="col-md-2 text-center d-flex align-items-center justify-content-center">
                         {post.image ? (
                             <img src={post.image} alt="Post" className="img-fluid rounded shadow-sm" style={{ maxHeight: '150px', objectFit: 'cover' }} />
@@ -204,13 +204,13 @@ function Post({ post, handleD }) {
 
                         <div className="d-flex justify-content-start mt-3 gap-2">
                             {/* <button className="btn btn-outline-primary btn-sm">
-                                <i className="bi bi-hand-thumbs-up"></i> Thích
+                                <i className="bi bi-hand-thumbs-up"></i> 
                             </button> */}
                             <button className="btn btn-outline-secondary btn-sm me-auto" onClick={() => setShowModal(true)}>
                                 <i className="bi bi-chat-dots"></i> Comment
                             </button>
                             {/* <button className="btn btn-outline-danger btn-sm">
-                                <i className="bi bi-share"></i> Chia sẻ
+                                <i className="bi bi-share"></i> 
                             </button> */}
                             <button className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(post.id)}>
                                 <i className="bi bi-trash"></i> Delete
@@ -229,7 +229,7 @@ function Post({ post, handleD }) {
                             <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                         </div>
                         <div className="modal-body">
-                            {/* Danh sách bình luận */}
+                            {/* List of comments */}
                             <ul className="list-group mb-3" style={{ maxHeight: "300px", overflowY: "auto" }}>
                                 {comments && comments.map((comment) => (
                                     <li key={comment.id} className="list-group-item d-flex align-items-start">
@@ -241,26 +241,26 @@ function Post({ post, handleD }) {
                                             style={{ width: "40px", height: "40px", objectFit: "cover" }}
                                         />
 
-                                        {/* Nội dung bình luận */}
+                                        {/*Comment content*/}
                                         <div>
-                                            {/* Tên người bình luận */}
+                                            {/* Commenter Name */}
                                             <strong>{comment.user?.name || "Anonymous"}</strong>
 
-                                            {/* Ngày tạo (định dạng DD/MM/YYYY) */}
+                                            {/* Date created (DD/MM/YYYY format) */}
                                             <small className="text-muted ms-2">
                                                 {new Date(comment.created_at).toLocaleDateString("vi-VN")}
                                             </small>
 
-                                            {/* Nội dung bình luận */}
+                                            {/* Comment content */}
                                             <p className="mb-1">{comment.comment}</p>
                                         </div>
                                     </li>
                                 ))}
                             </ul>
 
-                            {/* Form bình luận */}
+                            {/* Comment form */}
                             <div className="d-flex align-items-center position-relative">
-                                {/* Ô nhập bình luận (80%) */}
+                                {/* Comment input box (80%) */}
                                 <input
                                     type="text"
                                     className="form-control flex-grow-1 me-2"
@@ -273,7 +273,7 @@ function Post({ post, handleD }) {
                                 {/* Icon file (10%) */}
                                 <label htmlFor="fileUpload" className="d-flex align-items-center justify-content-center text-primary position-relative" style={{ width: "10%", cursor: "pointer" }}>
                                     <i className="bi bi-paperclip" style={{ fontSize: "1.5rem" }}></i>
-                                    {/* Badge hiển thị số file đã chọn */}
+                                    {/* Badge shows the number of selected files */}
                                     {(number !== 0) && (
                                         <span className="position-absolute top-0 start-10 translate-middle badge rounded-pill bg-danger">
                                             {number}
@@ -288,7 +288,7 @@ function Post({ post, handleD }) {
                                     multiple
                                 />
 
-                                {/* Nút gửi (10%) */}
+                                {/* Submit button (10%) */}
                                 <button className="btn btn-primary" style={{ width: "10%" }} onClick={handleCommentSubmit}>
                                     <i className="bi bi-send"></i>
                                 </button>

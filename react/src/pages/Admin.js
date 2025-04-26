@@ -46,7 +46,7 @@ function Admin() {
     return (
         <div className="d-flex">
             <div className="bg-dark text-white p-3 shadow" style={{ width: '250px', minHeight: '100vh' }}>
-                <h4 className="mb-4 text-center">🌟 eTutoring </h4>
+                <h4 className="mb-4 text-center">🌟 eTutoring</h4>
                 <ul className="nav flex-column">
                     <li className="nav-item mb-3">
                         <Link to="/" className="nav-link custom-hover d-flex align-items-center text-white">
@@ -55,16 +55,14 @@ function Admin() {
                     </li>
                     <li className="nav-item mb-3">
                         <Link to="/forum" className="nav-link custom-hover d-flex align-items-center text-white">
-                            <i className="bi bi-people-fill me-2"></i> Join Forum
+                            <i className="bi bi-people-fill me-2"></i> Blog
                         </Link>
                     </li>
-                    {(user.role === "tutor" || user.role === "staff" || user.role === "admin") && (
-                        <li className="nav-item mb-3">
-                            <Link to="/meeting" className="nav-link custom-hover d-flex align-items-center text-white">
-                                <i className="bi bi-camera-video me-2"></i> Manage Meetings
-                            </Link>
-                        </li>
-                    )}
+                    <li className="nav-item mb-3">
+                        <Link to="/meeting" className="nav-link custom-hover d-flex align-items-center text-white">
+                            <i className="bi bi-camera-video me-2"></i> Manage Meetings
+                        </Link>
+                    </li>
                     <li className="nav-item mb-3">
                         <Link to="/document" className="nav-link custom-hover d-flex align-items-center text-white">
                             <i className="bi bi-pencil me-2"></i> Upload Documents

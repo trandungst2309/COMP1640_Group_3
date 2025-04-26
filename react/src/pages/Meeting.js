@@ -22,6 +22,11 @@ function Meeting() {
     const [isRecording, setIsRecording] = useState(false);
     const audioChunks = useRef([]);
 
+    const [user] = useState(() => {
+        const storedUser = localStorage.getItem('user');
+        return storedUser ? JSON.parse(storedUser) : { name: 'Admin', role: 'guest' };
+    });
+
     useEffect(() => {
         const fetchMeetings = async () => {
             const data = await meetingService.getMeetings();
@@ -131,11 +136,11 @@ function Meeting() {
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Type</th>
+                        <th>Meeting Type</th>
                         <th>Tutor</th>
                         <th>Student</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
+                        <th>Start date</th>
+                        <th>End date</th>
                         <th style={{ width: '150px' }}>Status</th>
                         <th style={{ width: '250px' }}>Function</th>
                     </tr>
@@ -190,6 +195,7 @@ function Meeting() {
                                     >
                                         <FaRecordVinyl /> Record
                                     </Button>
+                                    {(user.role !== "student" && user.role !== "tutor") && (
                                     <Button
                                         variant="danger"
                                         size="sm"
@@ -197,13 +203,14 @@ function Meeting() {
                                     >
                                         <FaTrashAlt /> Delete
                                     </Button>
+                                    )}
                                 </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
                             <td colSpan="7" className="text-center">
-                            No data found
+                                No data
                             </td>
                         </tr>
                     )}
@@ -230,7 +237,7 @@ function Meeting() {
             )}
             <Modal show={showRecordingModal} onHide={() => setShowRecordingModal(false)} size="lg" centered>
                 <Modal.Header closeButton className="bg-light">
-                    <Modal.Title className="fs-5 fw-semibold text-dark">🎙️ Meeting Recording</Modal.Title>
+                    <Modal.Title className="fs-5 fw-semibold text-dark">🎙️ Record</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="p-4">
                     <div className="d-flex flex-column align-items-center">
@@ -257,7 +264,7 @@ function Meeting() {
                                                     download={`recording-${index + 1}.webm`}
                                                     className="btn btn-success mt-3"
                                                 >
-                                                    ⬇️ Download
+                                                    ⬇️ Dowload
                                                 </a>
                                             </div>
                                         </div>

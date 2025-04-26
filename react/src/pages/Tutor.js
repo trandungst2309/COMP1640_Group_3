@@ -14,7 +14,7 @@ function Tutor() {
     const [currentPage, setCurrentPage] = useState(1);
     const perPage = 5;
 
-    // State để quản lý modal
+    // State to manage modal
     const [showModal, setShowModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [students, setStudents] = useState([]);
@@ -60,7 +60,7 @@ function Tutor() {
                 />
             </div>
 
-            {/* Bảng Tutor */}
+            {/* Table Tutor */}
             <Table bordered hover responsive>
                 <thead className="table-dark">
                     <tr>
@@ -96,7 +96,7 @@ function Tutor() {
                 </tbody>
             </Table>
 
-            {/* Phân trang */}
+            {/* Pagination */}
             {totalPages > 1 && (
                 <Pagination className="justify-content-end">
                     <Pagination.First onClick={() => setCurrentPage(1)} disabled={currentPage === 1} />
@@ -111,7 +111,7 @@ function Tutor() {
                 </Pagination>
             )}
 
-            {/* Modal hiển thị chi tiết gia sư và danh sách sinh viên */}
+            {/* Modal displays tutor details and student list*/}
             <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
                 <Modal.Header closeButton>
                     <Modal.Title>Tutor Details</Modal.Title>
